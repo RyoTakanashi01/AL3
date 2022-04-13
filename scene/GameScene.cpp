@@ -30,7 +30,7 @@ void GameScene::Initialize() {
 	//サウンドデータ読み込み
 	soundDataHandle_ = audio_->LoadWave("se_sad03.wav");
 	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
-	audio_->SetVolume(soundDataHandle_, 0.1f);
+	audio_->SetVolume(soundDataHandle_, 0.01f);
 
 }
 
@@ -47,12 +47,14 @@ void GameScene::Update() {
 		audio_->StopWave(voiceHandle_);
 	}
 	value_++;
-	//旧式
+	/* 旧式
 	std::string strDebug = std::string("Value:") + std::to_string(value_);
 	debugText_->Print(strDebug, 50, 50, 1.0f);
+	*/
 
 	//新仕様
-	//debugText_->Printf("Value:%d", value_, 50, 50, 1.0f);
+	debugText_->SetPos(50, 70);
+	debugText_->Printf("Value:%d", value_);
 }
 
 void GameScene::Draw() {
