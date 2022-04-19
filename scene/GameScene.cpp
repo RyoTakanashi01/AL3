@@ -41,7 +41,7 @@ void GameScene::Initialize() {
 
 }
 
-void GameScene::Update() {}
+void GameScene::Update() {
 
 	XMFLOAT2 position = sprite_->GetPosition();
 	position.x += 2.0f;
@@ -90,7 +90,7 @@ void GameScene::Draw() {
 	/// </summary>
 
 	// スプライト描画後処理
-	//Sprite::PostDraw();
+	Sprite::PostDraw();
 	// 深度バッファクリア
 	dxCommon_->ClearDepthBuffer();
 #pragma endregion
@@ -100,7 +100,7 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 
 	/// <summary>
-	/// ここに3Dオブジェクトの描画処理を追加できる
+	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	/// </summary>
 
 	// 3Dオブジェクト描画後処理
