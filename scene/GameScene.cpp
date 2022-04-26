@@ -41,9 +41,16 @@ void GameScene::Initialize() {
 	}
 	
 	//ビュープロジェクションの初期化
-	viewProjection_.eye = {0, 0, -10};
-	viewProjection_.target = {0, 0, 0};
-	viewProjection_.up = {cosf(XM_PI / 4.0f), sinf(XM_PI/ 4.0f), 0.0f};
+	//viewProjection_.eye = {0, 0, -10};
+	//viewProjection_.target = {0, 0, 0};
+	//viewProjection_.up = {cosf(XM_PI / 4.0f), sinf(XM_PI/ 4.0f), 0.0f};
+	//viewProjection_.fovAngleY = XMConvertToRadians(10.0f);
+	
+	//viewProjection_.aspectRatio = 1.0f;
+
+	viewProjection_.nearZ = 52.0f;
+	viewProjection_.farZ = 53.0f;
+
 	viewProjection_.Initialize();
 
 
@@ -57,6 +64,34 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
+	if (input_->PushKey(DIK_UP)) {
+		viewProjection_.nearZ += 0.1f;
+		viewProjection_.fovAngleY = min(viewProjection_.fovAngleY, XM_PI);
+	}else if (input_->PushKey(DIK_DOWN)) {
+		viewProjection_.nearZ -= 0.1f;
+		viewProjection_.fovAngleY = max(viewProjection_.fovAngleY, 0.01f);
+	}
+	viewProjection_.UpdateMatrix();
+
+	debugText_->SetPos(50, 130);
+	debugText_->Printf("nearZ:%f", viewProjection_.nearZ);
+
+	
+	if (input_->PushKey(DIK_W)) {
+		viewProjection_.fovAngleY += 0.01f;
+		viewProjection_.fovAngleY = min(viewProjection_.fovAngleY, XM_PI);
+	}
+	if (input_->PushKey(DIK_S)) {
+		viewProjection_.fovAngleY -= 0.01f;
+		viewProjection_.fovAngleY = max(viewProjection_.fovAngleY, 0.01f);
+	}
+	viewProjection_.UpdateMatrix();
+
+	debugText_->SetPos(50, 110);
+	debugText_->Printf(
+	  "fovAngleY(Degree):%f", XMConvertToDegrees(viewProjection_.fovAngleY));
+	
+	/*
 	//視点の移動ベクトル
 	XMFLOAT3 move = {0, 0, 0};
 
@@ -102,7 +137,7 @@ void GameScene::Update() {
 	viewProjection_.up = {cosf(viewAngle), sinf(viewAngle), 0.0f};
 
 	viewProjection_.UpdateMatrix();
-
+	*/
 	debugText_->SetPos(50, 50);
 	debugText_->Printf(
 	  "eye:(%f, %f, %f)", viewProjection_.eye.x, viewProjection_.eye.y, viewProjection_.eye.z
@@ -142,6 +177,7 @@ void GameScene::Update() {
 	  "scale:(%f, %f, %f)", worldTransform_.scale_.x, worldTransform_.scale_.y,
 	  worldTransform_.scale_.z);
 	*/
+
 }
 
 void GameScene::Draw() {
